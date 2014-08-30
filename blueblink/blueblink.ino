@@ -1,14 +1,20 @@
 
 
+/*
+Author: wangeq33@gmail.com,copyright.
+*/
 
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial(10, 11); // RX, TX
+
 char val;
 int ledpin=13;
 int relaypin=12;
 int sensorPin = A0; 
 int sensorValue = 0;
 int delaycount =0;
+
+unsigned long time,timeDelay;
 
 void setup()
 {
@@ -18,8 +24,7 @@ void setup()
   
   // set the data rate for the SoftwareSerial port
   mySerial.begin(9600);
-  //mySerial.println("Hello, world?");
-  
+  time = millis();
 }
 void loop()
 {
@@ -52,8 +57,9 @@ void setOff()
 
 void delayInfo()
 {
-  delaycount = delaycount + 1;
-  if (delaycount >=30000 )
+  timeDelay = millis();
+  
+  if (timeDelay - time >= 2000)
   {
     sensorValue = analogRead(sensorPin); 
     Serial.println("TH:"+sensorValue);
@@ -70,6 +76,6 @@ void delayInfo()
       //mySerial.write('w');
       setOff();
     }
-    delaycount = 0;
+    time = timeDelay;
   }
 }
